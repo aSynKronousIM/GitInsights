@@ -58,6 +58,11 @@
           Chart.pieChart(languages, config);
         });
     };
+
+    $scope.getUserFollowers = function() {
+      console.log('ehrro');
+      console.log(GitApi.getUserFollowers('dblanchard13'));
+    }
   }
 })();
 

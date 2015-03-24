@@ -17,7 +17,8 @@ function GitApi ($q, $http, Auth) {
     getUserRepos: getUserRepos,
     getUserContact: getUserContact,
     gatherLanguageData: gatherLanguageData,
-    getUserLanguages: getUserLanguages
+    getUserLanguages: getUserLanguages,
+    getUserFollowers: getUserFollowers
   };
 
   //a week is an array of objects
@@ -234,6 +235,13 @@ function GitApi ($q, $http, Auth) {
     }
 
     return result;
+  }
+
+  function getUserFollowers (username) {
+    var followers = gitApi + 'users/' + username + '/followers';
+     return get(followers).then(function (res) {
+      return res.data;
+     });
   }
 
 }

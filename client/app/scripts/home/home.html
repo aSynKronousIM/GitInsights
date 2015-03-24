@@ -9,6 +9,7 @@
               <!-- <li><a href="#/compare">Compare</a></li> --> 
               <li><a ng-click="login()" ng-if="!github.username" href="">Login with Git</a></li>
               <li ng-if="github.username" scope.model="github"><h2>{{github.username}}</h2></li>
+              <li><a ng-click="getUserFollowers()" href="">Get User Followers in Console</a></li>
             </ul>
           </nav>
         </div>
