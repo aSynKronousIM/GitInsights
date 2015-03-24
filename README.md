@@ -34,13 +34,15 @@ Finding talent via Github is hard. Github Insights makes it easy to analyse and 
 
 ### Installing Dependencies
 
-From within the root directory:
+If you don't already have bower and npm installed, you'll need to do that first. 
+After that, cd into the root directory and simply run:
 
 ```sh
-sudo npm install -g bower
 npm install
 bower install
 ```
+
+Bam, cake.
 
 ### Roadmap
 
