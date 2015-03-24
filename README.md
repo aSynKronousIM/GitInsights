@@ -6,9 +6,9 @@ Quickly visualize/analyze Github user activity, GitInsights Today!
 
 ## Team
 
-  - __Product Owner__: John Zhang
-  - __Scrum Master__: Eli Xian
-  - __Development Team Members__: John Zhang, Eli Xian, Seunghoon Ko
+  - __Product Owner__: Sean Kim
+  - __Scrum Master__: John Games
+  - __Development Team Members__: Kate Jefferson & David Blanchard
 
 ## Table of Contents
 
