@@ -15,6 +15,7 @@ function GitApi ($q, $http, Auth, $resource) {
     getAllWeeklyData: getAllWeeklyData,
     getRepoWeeklyData: getRepoWeeklyData,
     getUserRepos: getUserRepos,
+    getForks: getForks,
     getUserContact: getUserContact,
     gatherLanguageData: gatherLanguageData,
     getUserLanguages: getUserLanguages,
@@ -159,6 +160,15 @@ function GitApi ($q, $http, Auth, $resource) {
       usersRepos[username] = repos;
       return usersRepos[username];
     });
+  }
+
+  function getForks (username) {
+    var allRepos = usersRepos[username];
+    var forksCount = 0;
+    for (var i = 0; i < allRepos.length; i++) {
+      forksCount = forksCount + allRepos[i].forks_count;
+    }
+    return forksCount;
   }
 
   function getUserContact (username) {

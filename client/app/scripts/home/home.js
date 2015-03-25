@@ -47,6 +47,9 @@
           // this returns an array of tuples with the form 
           // [user contributions to this repo, repo language stats, total repo activity] when it resolves
         })
+        .then(function () {
+          return GitApi.getForks(username);
+        })
         .then(function (data) {
           // this time the data is processed to create a pie chart that estimates 
           // the % of the each language the user codes in by taking the repo language stats * (user activity / total repo activity)
@@ -62,6 +65,7 @@
 
           Chart.pieChart(languages, config);
         });
+
     };
 
     // 
