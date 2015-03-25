@@ -5,7 +5,7 @@ var Firebase = require('firebase');
 
 var ref = new Firebase('https://gitinsights.firebaseio.com');
 
-var list = ref.child("candidates");
+var list = ref.child("list");
 
 list.set({
   candidate1: {
