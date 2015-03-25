@@ -40,7 +40,7 @@
         .then(function (data) {
           return GitApi.gatherLanguageData(data);
           // this returns an array of tuples with the form 
-          // [user contirbutions to this repo, repo language stats, total repo activity] when it resolves
+          // [user contributions to this repo, repo language stats, total repo activity] when it resolves
         })
         .then(function (data) {
           // this time the data is processed to create a pie chart that estimates 
@@ -57,6 +57,15 @@
 
           Chart.pieChart(languages, config);
         });
+    };
+
+    // David's quick access area to test different functions
+    $scope.testTest = function(){
+      // GitApi.testGetContribHistory();
+      // currently clears out both pie charts, if I clear out the lineGraph, then it won't come back up again.
+      Chart.empty()
+      // GitApi.getUserFollowers();
+
     };
   }
 })();

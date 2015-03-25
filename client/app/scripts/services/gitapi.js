@@ -17,7 +17,8 @@ function GitApi ($q, $http, Auth) {
     getUserRepos: getUserRepos,
     getUserContact: getUserContact,
     gatherLanguageData: gatherLanguageData,
-    getUserLanguages: getUserLanguages
+    getUserLanguages: getUserLanguages,
+    testGetContribHistory: testGetContribHistory
   };
 
   //a week is an array of objects
@@ -65,6 +66,59 @@ function GitApi ($q, $http, Auth) {
       params: params
     });
   }
+
+
+// David Testing Area!!!
+// Please beware
+
+  function testGetContribHistory (username) {
+    // var url = "https://statocat.herokuapp.com/u/johnnygames.json"
+      var page = 1;
+      var outsideLength = 0;
+      var url = "https://api.github.com/users/johnnygames/events?page=1";
+    // get(url).then(function(res){
+    //   console.log('Here is your data - ', res.data);
+    // })
+    var params = params || {access_token: Auth.getToken()};
+
+
+    return $http({
+      mathod: 'GET',
+      // headers: { Access-Control-Allow-Origin: "*" },
+      url: url,
+      params: params
+    })
+      .success(function(data, status, headers, config){
+        console.log('success');
+        console.log('data - ', data);
+        console.log('status - ', status);
+        console.log('headers - ', headers);
+        console.log('config - ', config);
+    })
+      .error(function(){
+        console.log('error');
+      });
+
+    // var recursiveGetter = function(){
+    //   get(url).then(function(res, req){
+    //     console.log("sane data - ", res.data);
+    //     console.log('next link - ', res.link)
+    //     var length = res.data.length;
+    //     outsideLength = length;
+    //     // if(outsideLength === 100){
+    //     //   page = page + 1;
+    //     //   outsideLength = 0;
+    //     //   recursiveGetter()
+    //     // }
+    //   });
+    // }
+    // recursiveGetter();
+
+  }
+
+// End of David Testing Area
+// Proceed normally
+
 
   //returns an array of additions/deletions and commits
   //made by a user for a given repo

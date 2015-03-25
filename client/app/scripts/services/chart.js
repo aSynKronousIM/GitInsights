@@ -12,7 +12,8 @@ function Chart () {
 
   return {
     lineGraph: lineGraph,
-    pieChart: pieChart
+    pieChart: pieChart,
+    empty: empty
   };
 
   function lineGraph (data, username) {
@@ -100,6 +101,13 @@ function Chart () {
       return pieChart;
     });
   };
+
+  // Barbaric reset function
+  function empty () {
+    $('#chart2').remove();
+    $('#chart3').remove();
+    console.log('Reset called');
+  }
 
 }
 })();
