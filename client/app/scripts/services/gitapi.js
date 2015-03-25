@@ -9,7 +9,7 @@ function GitApi ($q, $http, Auth) {
 
   var gitApi = 'https://api.github.com/';
   var usersRepos = {};
-
+  
   return {
     reduceAllWeeklyData: reduceAllWeeklyData,
     getAllWeeklyData: getAllWeeklyData,
@@ -250,20 +250,22 @@ function GitApi ($q, $http, Auth) {
     var username = username;
     var tempData = {
       root: username,
-      followers: []
+      children: []
     };
 
     return getUserFollowers(username)
       .then(function (data) {
         var holder = [];
-        var temp = [];        
+        //var temp = [];        
         for (var i = 0; i < data.length; i++) {
           getUserFollowers(data[i]['login'])
             .then(function (data) {
+              //console.log(data, 'this is data')
               var temp = holder.concat(data);
-              tempData.followers.push({
+              //console.log(tempData, 'this is tempData');
+              tempData.children.push({
                 name: data[i]['login'],
-                followers: temp// .then(function (data) {return data;})
+                children: temp
               });
             });
         }
@@ -272,14 +274,3 @@ function GitApi ($q, $http, Auth) {
   }
 }
 })();
-    // breakPoint++;
-    // if (breakPoint < 5) {
-    //   return;
-    // }
-    // return getUserFollowers(username)
-    //   .then(function (data) {
-    //     for (var i = 0; i < data.length; i++) {
-    //       tempData['followers'].push(followerObj(data[i]['login'], breakPoint));
-    //     }
-    //   });
-    // }
