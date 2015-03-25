@@ -17,7 +17,8 @@ function GitApi ($q, $http, Auth) {
     getUserRepos: getUserRepos,
     getUserContact: getUserContact,
     gatherLanguageData: gatherLanguageData,
-    getUserLanguages: getUserLanguages
+    getUserLanguages: getUserLanguages,
+    testGetContribHistory: testGetContribHistory
   };
 
   //a week is an array of objects
@@ -62,9 +63,33 @@ function GitApi ($q, $http, Auth) {
     return $http({
       method: 'GET',
       url: url,
-      params: params
+      dataType: 'jsonp'
+      // params: params
     });
   }
+
+
+// David Testing Area!!!
+// Please beware
+
+  function testGetContribHistory (username) {
+    // var url = "https://api.github.com/users/johnnygames/followers"
+    var url = "https://statocat.herokuapp.com/u/johnnygames.json"
+
+    // get(url).then(function(res){
+    //   console.log('Here is your data - ', res.data);
+    // })
+
+    var userContact = gitApi + "users/" + username + "/followers";
+    console.log('sanity')
+    get(url).then(function(res){
+      console.log("sane data - ", res.data);
+    });
+  }
+
+// End of David Testing Area
+// Proceed normally
+
 
   //returns an array of additions/deletions and commits
   //made by a user for a given repo

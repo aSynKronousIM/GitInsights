@@ -40,7 +40,7 @@
         .then(function (data) {
           return GitApi.gatherLanguageData(data);
           // this returns an array of tuples with the form 
-          // [user contirbutions to this repo, repo language stats, total repo activity] when it resolves
+          // [user contributions to this repo, repo language stats, total repo activity] when it resolves
         })
         .then(function (data) {
           // this time the data is processed to create a pie chart that estimates 
@@ -57,6 +57,24 @@
 
           Chart.pieChart(languages, config);
         });
+    };
+
+    $scope.testTest = function(){
+      // GitApi.testGetContribHistory();
+      // GitApi.getUserFollowers();
+      $.ajax({
+        type: 'GET',
+        contentType: 'application/json', 
+        dataType: 'jsonp',
+        url: 'https://statocat.herokuapp.com/u/johnnygames.json',
+        success: function(data){
+          console.log('Success')
+        },
+        error: function(){
+          console.log('fucking error')
+        }
+      })
+
     };
   }
 })();
