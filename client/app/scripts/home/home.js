@@ -59,21 +59,12 @@
         });
     };
 
+    // David's quick access area to test different functions
     $scope.testTest = function(){
       // GitApi.testGetContribHistory();
+      // currently clears out both pie charts, if I clear out the lineGraph, then it won't come back up again.
+      Chart.empty()
       // GitApi.getUserFollowers();
-      $.ajax({
-        type: 'GET',
-        contentType: 'application/json', 
-        dataType: 'jsonp',
-        url: 'https://statocat.herokuapp.com/u/johnnygames.json',
-        success: function(data){
-          console.log('Success')
-        },
-        error: function(){
-          console.log('fucking error')
-        }
-      })
 
     };
   }
