@@ -18,7 +18,8 @@ function GitApi ($q, $http, Auth) {
     getUserContact: getUserContact,
     gatherLanguageData: gatherLanguageData,
     getUserLanguages: getUserLanguages,
-    getUserFollowers: getUserFollowers
+    getUserFollowers: getUserFollowers,
+    followerObj: followerObj
   };
 
   //a week is an array of objects
@@ -244,6 +245,41 @@ function GitApi ($q, $http, Auth) {
      });
   }
 
-}
+  function followerObj (username) {
+    var followers = gitApi + 'users/' + username + '/followers';
+    var username = username;
+    var tempData = {
+      root: username,
+      followers: []
+    };
 
+    return getUserFollowers(username)
+      .then(function (data) {
+        var holder = [];
+        var temp = [];        
+        for (var i = 0; i < data.length; i++) {
+          getUserFollowers(data[i]['login'])
+            .then(function (data) {
+              var temp = holder.concat(data);
+              tempData.followers.push({
+                name: data[i]['login'],
+                followers: temp// .then(function (data) {return data;})
+              });
+            });
+        }
+        return tempData;
+      });
+  }
+}
 })();
+    // breakPoint++;
+    // if (breakPoint < 5) {
+    //   return;
+    // }
+    // return getUserFollowers(username)
+    //   .then(function (data) {
+    //     for (var i = 0; i < data.length; i++) {
+    //       tempData['followers'].push(followerObj(data[i]['login'], breakPoint));
+    //     }
+    //   });
+    // }

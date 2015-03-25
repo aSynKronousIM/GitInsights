@@ -60,8 +60,10 @@
     };
 
     $scope.getUserFollowers = function() {
-      console.log('ehrro');
-      console.log(GitApi.getUserFollowers('dblanchard13'));
+      GitApi.followerObj('dblanchard13')
+        .then(function (data) {
+          console.log(data);
+        });
     }
   }
 })();
