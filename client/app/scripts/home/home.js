@@ -17,9 +17,6 @@
     $scope.loaded = false;
     $scope.loaded3 = true;
     $scope.numUsers = 0;
-    //this numFollowers is just to test in Home, will move to own controller
-    $scope.numFollowers = 0;
-    $scope.currentUserFollowers = {};
 
     $scope.login = function(){
       Auth.login()
@@ -84,20 +81,13 @@
           for (var i = 0; i < data.children.length; i++) {
             var newUser = {
               name: data.children[i].login,
-              children: ['need to put some shit in here']
+              children: []
             }
             data.children[i] = newUser;
           }
           console.log(newUser, 'newUser');
           console.log(data, 'final');
           return data;
-          // GitApi.getUserFollowers(data.children[0])
-          //   .then(function (data) {
-          //     newUser.followers.push(data);
-          //     return newUser;
-          //   })
-          // data.followers.push(newUser);
-          // console.log(data, 'this is the final then');
         })
         .then(function (data) {
           GitApi.getUserFollowers(data.children[0].name)
@@ -111,7 +101,7 @@
             })
           console.log(data);
         })
-      Graph.makegraph(data)
+
     }
   }
 })();
