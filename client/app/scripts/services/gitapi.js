@@ -18,7 +18,7 @@ function GitApi ($q, $http, Auth, $resource) {
     getUserContact: getUserContact,
     gatherLanguageData: gatherLanguageData,
     getUserLanguages: getUserLanguages,
-    getEventsData: getEventsData
+    getEventsData: getEventsData,
     getUserFollowers: getUserFollowers,
     getUserFollowers2: getUserFollowers2,
     followerObj: followerObj,

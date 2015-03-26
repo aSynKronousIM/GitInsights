@@ -64,7 +64,12 @@
         });
     };
 
+    // 
+    // 
     // David's quick access play area to test different functions
+    // 
+    // 
+
     $scope.getUserContributionData = function(username){
       // Default to Games if no username is entered
       var username = $scope.gitName || 'johnnygames';
@@ -78,7 +83,7 @@
 
         // recursive subroutine for traversing the paginated results
         var pageTraverse = function(num){
-          return Events.query({username: username, number: num}, function(data){
+          return Events.query({username: username, number: num, access_token: Auth.getToken()}, function(data){
             // base case
             // since pages can be up to 30 items in length, if the page has fewer than 30, it's the last page
             if(data.length < 30){
