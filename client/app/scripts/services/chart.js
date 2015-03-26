@@ -17,7 +17,6 @@ function Chart () {
   };
 
   function lineGraph (data, username) {
-    
     var secondsPerYear = 525600 * 60;
     var dateNow = new Date() / 1000; //convert to unix
     var dateXYearsAgo = dateNow - (secondsPerYear * 1);
@@ -48,8 +47,15 @@ function Chart () {
     nv.addGraph(function() {
       // Creates multi-line graph
       var chart = nv.models.lineChart()
-      .x(function(d) { return d[0] })
-      .y(function(d) { return d[1] })
+      .x(function(d) {
+        // console.log('d[0] - ', d) 
+        return d[0] 
+
+      })
+      .y(function(d) { 
+        // console.log('d[1] - ', d) 
+        return d[1] 
+      })
       .color(d3.scale.category10().range())
       .useInteractiveGuideline(true);
 
@@ -74,6 +80,9 @@ function Chart () {
       nv.utils.windowResize(chart.update);
       return chart;
     });
+    console.log('Net Additions - ', netAdditions);
+    console.log('unixTimeStamps - ', unixTimeStamps);
+    console.log('newTimeStamps - ', newTimeStamps);
   };
 
   function pieChart (languages, config) {
@@ -111,3 +120,6 @@ function Chart () {
 
 }
 })();
+
+
+

@@ -1,11 +1,13 @@
 angular.module('gitInsight', [
   'gitInsight.home',
   'ngRoute',
+  'ngResource',
   'gitInsight.gitapi',
   'gitInsight.auth',
   'gitInsight.userinfo',
   'gitInsight.compare',
-  'gitInsight.chart'
+  'gitInsight.chart',
+  'gitInsight.dateFormat'
 ])
 .config(function($routeProvider, $httpProvider){
   $routeProvider
