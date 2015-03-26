@@ -23,7 +23,7 @@ db.factory('favoritesList', ['$firebaseObject',
 /**
  * Firebase controller for favorite list
  */
-db.controller('favoriteController', ['$scipe', 'favoritesList',
+db.controller('favoriteController', ['$scope', 'favoritesList',
   function($scope, favoritesList) {
     // make list available to DOM
     // need username from auth
