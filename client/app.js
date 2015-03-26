@@ -8,6 +8,7 @@ angular.module('gitInsight', [
   'gitInsight.compare',
   'gitInsight.chart',
   'gitInsight.dateFormat'
+  'gitInsight.dendrogram'
 ])
 .config(function($routeProvider, $httpProvider){
   $routeProvider

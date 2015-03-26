@@ -9,9 +9,9 @@
     .primaryPalette('light-blue')
   });
 
-  HomeController.$inject = ['$scope', 'GitApi', 'Auth', 'Chart', '$q', '$http', '$resource', 'dateFormat'];
+  HomeController.$inject = ['$scope', 'GitApi', 'Auth', 'Chart', 'Dendrogram', '$q', '$timeout', '$http', '$resource', 'dateFormat'];
 
-  function HomeController($scope, GitApi, Auth, Chart, $q, $http, $resource, dateFormat){
+  function HomeController($scope, GitApi, Auth, Chart, Dendrogram, $q, $timeout, $http, $resource, dateFormat){
     $scope.github = {};
     $scope.currentUser = {};
     $scope.loaded = false;
@@ -19,6 +19,8 @@
     $scope.numUsers = 0;
     $scope.gitName = $scope.gitName;
     $scope.totalEvents = [];
+    $scope.recursiveChecker = false;
+    $scope.counter = 0;
 
     $scope.login = function(){
       Auth.login()
@@ -110,6 +112,38 @@
 
     // End of David's Play Area
 
+    $scope.getUserFollowers = function() {
+      
+      GitApi.getUserFollowers('johnnygames')
+        .then(function (data) {
+          return GitApi.initialFollowerChain(data);
+        })
+        .then(function (data) {
+          return GitApi.followerCreation(data);
+        })
+        .then(function (data) { 
+          data.children.forEach(function (entry) {
+            GitApi.getUserFollowers2(entry.name)
+              .then(function (newData) {
+                for (var j = 0; j < newData.length; j++) {
+                  entry.children.push(
+                    {
+                      name: newData[j].login,
+                      children: []
+                    });
+                }
+                return data;
+              })
+          })
+          return data; 
+        })
+        .then(function (data) {
+          $timeout(function () {
+            Dendrogram.dendrogram(data)
+          }
+          , 1000)
+        })
+    }
   }
 })();
-
+          
