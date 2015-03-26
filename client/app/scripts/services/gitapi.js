@@ -9,6 +9,7 @@ function GitApi ($q, $http, Auth, $resource) {
 
   var gitApi = 'https://api.github.com/';
   var usersRepos = {};
+  var forkStar = {};
 
   return {
     reduceAllWeeklyData: reduceAllWeeklyData,
@@ -16,6 +17,7 @@ function GitApi ($q, $http, Auth, $resource) {
     getRepoWeeklyData: getRepoWeeklyData,
     getUserRepos: getUserRepos,
     getForks: getForks,
+    getStars: getStars,
     getUserContact: getUserContact,
     gatherLanguageData: gatherLanguageData,
     getUserLanguages: getUserLanguages,
@@ -165,10 +167,23 @@ function GitApi ($q, $http, Auth, $resource) {
   function getForks (username) {
     var allRepos = usersRepos[username];
     var forksCount = 0;
-    for (var i = 0; i < allRepos.length; i++) {
-      forksCount = forksCount + allRepos[i].forks_count;
+    for (var i = allRepos.length-1; i >= 0; i--) {
+      //forksCount += allRepos[i].forks_count;
+      forkStar[i] = [];
+      forkStar[i].push(allRepos[i].forks_count);
     }
+    console.log('forkStar: ', forkStar);
     return forksCount;
+  }
+
+  function getStars (username) {
+    var allRepos = usersRepos[username];
+    var starsCount = 0;
+    for (var i = allRepos.length-1; i >= 0; i--) {
+      forkStar[i].push(allRepos[i].stargazers_count);
+    }
+    console.log('stars: ', starsCount);
+    return starsCount;
   }
 
   function getUserContact (username) {
