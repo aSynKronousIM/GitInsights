@@ -19,6 +19,11 @@ function GitApi ($q, $http, Auth, $resource) {
     gatherLanguageData: gatherLanguageData,
     getUserLanguages: getUserLanguages,
     getEventsData: getEventsData
+    getUserFollowers: getUserFollowers,
+    getUserFollowers2: getUserFollowers2,
+    followerObj: followerObj,
+    initialFollowerChain: initialFollowerChain,
+    followerCreation: followerCreation
   };
 
   //a week is an array of objects
@@ -285,6 +290,68 @@ function GitApi ($q, $http, Auth, $resource) {
     return result;
   }
 
-}
+  function getUserFollowers (username) {
+    var followers = gitApi + 'users/' + username + '/followers';
+     return get(followers).then(function (res) {
+      return res.data;
+     });
+  }
 
+  function getUserFollowers2 (username) {
+    var followers = gitApi + 'users/' + username + '/followers';
+     return get(followers).then(function (res) {
+      return res.data;
+     });
+  }
+
+  function followerObj (username) {
+    var followers = gitApi + 'users/' + username + '/followers';
+    var username = username;
+    var tempData = {
+      root: username,
+      children: []
+    };
+
+    return getUserFollowers(username)
+      .then(function (data) {
+        var holder = [];
+        //var temp = [];        
+        for (var i = 0; i < data.length; i++) {
+          getUserFollowers(data[i]['login'])
+            .then(function (data) {
+              //console.log(data, 'this is data')
+              var temp = holder.concat(data);
+              //console.log(tempData, 'this is tempData');
+              tempData.children.push({
+                name: data[i]['login'],
+                children: temp
+              });
+            });
+        }
+        return tempData;
+      });
+  }
+
+  function initialFollowerChain (array) {
+    var testData = {
+      name: 'johnnygames',
+      children: []
+    }
+    for (var i = 0; i < array.length; i++) {
+      testData.children.push(array[i]);
+    }
+    return testData;
+  }
+
+  function followerCreation (obj) {
+    for (var i = 0; i < obj.children.length; i++) {
+      var newUser = {
+        name: obj.children[i].login,
+        children: []
+      }
+      obj.children[i] = newUser;
+    }
+    return obj;
+  }
+}
 })();
