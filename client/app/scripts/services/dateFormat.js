@@ -11,7 +11,8 @@ function dateFormat () {
     ymdFormat: ymdFormat,
     dayRange: dayRange,
     processContributionData: processContributionData,
-    determineLastMonth: determineLastMonth
+    determineLastMonth: determineLastMonth,
+    contribsPerDay: contribsPerDay
   };
 
   function ymdFormat (ymdDate) {
@@ -53,13 +54,11 @@ function dateFormat () {
     });
     var length = dates.length;
     var endDate = dates[0];
-    // var monthAgoStart = null;
     var dateRange = null;
 
     var subRoutine = function(newStart){
-      if(dayRange(newStart, endDate) < 30){
+      if(dayRange(newStart, endDate) < 32){
         console.log('in base Case - ', newStart);
-        // monthAgoStart = newStart;
         dateRange = dayRange(newStart, endDate);
         return;
       }
@@ -71,7 +70,7 @@ function dateFormat () {
     var contributions = dates.length;
     console.log('Last month contributions - ', contributions);
     console.log('Last month dateRange - ', dateRange);
-    var uglyAverage = contributions / dateRange;
+    var uglyAverage = contributions / 30;
     console.log('Last month ugly average - ', uglyAverage);
     var pastMonthAverage = uglyAverage.toFixed(2);
 
@@ -90,7 +89,6 @@ function dateFormat () {
       var pastMonthAverage = determineLastMonth(allData);
     }
     
-
     var result = {
       username: username, 
       total: contributions, 
@@ -100,8 +98,30 @@ function dateFormat () {
     }
     return result;
   };
+
+// Not currently being used, but it returns an object in the form of {{date1: freq1}, {date2: freq2}}
+// Date is the date a contribution was made by a user and freq is the number of contribs the user made that day
+  function contribsPerDay (allData) {
+    var dates = {};
+
+    allData.forEach(function(e){
+      var ymdDate = e.created_at.slice(0,10);
+      dates[ymdDate] = dates[ymdDate] || 0;
+      var freq = dates[ymdDate];
+      dates[ymdDate] = freq++;
+      dates[ymdDate] = freq++;
+    });
+    console.log('Dates - ', dates);
+    return dates;
+  }
 }
 
 })();
+
+
+
+
+
+
 
 
