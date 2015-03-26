@@ -8,34 +8,48 @@ var db = angular.module('Firebase', ['firebase']);
 /** Favorite Factory
  * returns the user's list of favorites
  */
-db.factory('favoritesList', ['$firebaseArray',
-  function($firebaseArray) {
-    // need reference to user's data
-    var user = 'blah';
-    var ref = new Firebase('https://gitinsights.firebaseio.com/' + user);
-    return $firebaseArray(ref);
+db.factory('favoritesList', ['$firebaseObject',
+  function($firebaseObject) {
+    return function(username) {
+      // need reference to user's data ?
+      var ref = new Firebase('https://gitinsights.firebaseio.com/');
+      var profileRef = ref.child(username);
+      // return synchronized object
+      return $firebaseObject(profileRef);
+    };
   }
 ]);
 
 /**
  * Firebase controller for favorite list
  */
-db.controller('FavoriteController',
+db.controller('favoriteController', ['$scipe', 'favoritesList',
   function($scope, favoritesList) {
-
+    // make list available to DOM
+    // need username from auth
     $scope.user = 'Guest' + Math.round(Math.random() * 100);
-    // adds array to scope to be used in ng-repeat
-    $scope.favorites = favoritesList;
+    $scope.list = favoritesList($scope.user);
 
-    // method to add favorite called by ng-submit
-    $scope.addFavorite = function() {
-      $scope.favorites.$add({
-        username: $scope.username
-      });
-      // resets username field
-      $scope.username = '';
-    };
+    // 3-way binding, may eliminate need for save function
+    favoritesList($scope.user).$bindTo($scope, 'favoritesList');
 
+    //// syncs object back to Firebase
+    //$scope.saveFavorites = function () {
+    //  $scope.list.$save().then(function() {
+    //    console.log('List saved to Firebase!');
+    //  }).catch(function(error) {
+    //    console.log('Sync failed:' + error);
+    //  });
+    //};
+
+    //// method to add favorite called by ng-submit
+    //$scope.addFavorite = function() {
+    //  $scope.favorites.$add({
+    //    username: $scope.username
+    //  });
+    //  // resets username field
+    //  $scope.username = '';
+    //};
   }
-);
+]);
 
