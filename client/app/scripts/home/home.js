@@ -9,14 +9,16 @@
     .primaryPalette('light-blue')
   });
 
-  HomeController.$inject = ['$scope', 'GitApi', 'Auth', 'Chart'];
+  HomeController.$inject = ['$scope', 'GitApi', 'Auth', 'Chart', 'Dendrogram', '$q', '$timeout'];
 
-  function HomeController($scope, GitApi, Auth, Chart){
+  function HomeController($scope, GitApi, Auth, Chart, Dendrogram, $q, $timeout){
     $scope.github = {};
     $scope.currentUser = {};
     $scope.loaded = false;
     $scope.loaded3 = true;
     $scope.numUsers = 0;
+    $scope.recursiveChecker = false;
+    $scope.counter = 0;
 
     $scope.login = function(){
       Auth.login()
@@ -63,91 +65,34 @@
       
       GitApi.getUserFollowers('johnnygames')
         .then(function (data) {
-          console.log(data, ' unaltered');
-          console.log(testData, 'before declaration')
-          var testData = {
-            root: 'random',
-            children: []
-          }
-          console.log(testData, 'JUST CREATED');
-          for (var i = 0; i < data.length; i++) {
-            testData.children.push(data[i]);
-          }
-          console.log(testData);
-          return testData;
+          return GitApi.initialFollowerChain(data);
         })
         .then(function (data) {
-          console.log(data, 'first');
-          for (var i = 0; i < data.children.length; i++) {
-            var newUser = {
-              name: data.children[i].login,
-              children: []
-            }
-            data.children[i] = newUser;
-          }
-          console.log(newUser, 'newUser');
-          console.log(data, 'final');
-          return data;
+          return GitApi.followerCreation(data);
+        })
+        .then(function (data) { 
+          data.children.forEach(function (entry) {
+            GitApi.getUserFollowers2(entry.name)
+              .then(function (newData) {
+                for (var j = 0; j < newData.length; j++) {
+                  entry.children.push(
+                    {
+                      name: newData[j].login,
+                      children: []
+                    });
+                }
+                return data;
+              })
+          })
+          return data; 
         })
         .then(function (data) {
-          GitApi.getUserFollowers(data.children[0].name)
-            .then(function (newData) {
-              for (var i = 0; i < newData.length; i++) {
-                data.children[0].children.push(newData[i]);
-              }
-              console.log(newData, 'new data nested then');
-              console.log(data, 'data nested then');
-              return newData;
-            })
-          console.log(data);
+          $timeout(function () {
+            Dendrogram.dendrogram(data)
+          }
+          , 1000)
         })
-
     }
   }
 })();
-
-      // var radius = 960 / 2;
-
-      // var cluster = d3.layout.cluster()
-      //     .size([360, radius - 120]);
-
-      // var diagonal = d3.svg.diagonal.radial()
-      //     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
-
-      // var svg = d3.select("body").append("svg")
-      //     .attr("width", radius * 2)
-      //     .attr("height", radius * 2)
-      //   .append("g")
-      //     .attr("transform", "translate(" + radius + "," + radius + ")");
-      //     //data = JSON.parse(data);
-
-      //     console.log(tempData);
-      //     console.log(data, 'this is data');
-      //     var nodes = cluster.nodes(data);
-      //     //console.log(nodes, 'these are nodes');
-      //     var links = cluster.links(nodes);
-      //     //console.log(links, 'these are links');
-
-
-      //     var link = svg.selectAll(".link")
-      //         .data(links)
-      //       .enter().append("path")
-      //         .attr("class", "link")
-      //         .attr("d", diagonal);
-
-      //     var node = svg.selectAll(".node")
-      //         .data(nodes)
-      //       .enter().append("g")
-      //         .attr("class", "node")
-      //         .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-
-      //     node.append("circle")
-      //         .attr("r", 4.5);
-
-      //     node.append("text")
-      //         .attr("dx", function(d) { return d.children ? -8 : 8; })
-      //         .attr("dy", 3)
-      //         .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-      //         .text(function(d) { return d.name; });
-      //   });   
-      // d3.select(self.frameElement).style("height", radius * 2 + "px");     
+          

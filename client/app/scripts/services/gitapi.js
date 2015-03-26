@@ -9,7 +9,7 @@ function GitApi ($q, $http, Auth) {
 
   var gitApi = 'https://api.github.com/';
   var usersRepos = {};
-  
+
   return {
     reduceAllWeeklyData: reduceAllWeeklyData,
     getAllWeeklyData: getAllWeeklyData,
@@ -19,7 +19,10 @@ function GitApi ($q, $http, Auth) {
     gatherLanguageData: gatherLanguageData,
     getUserLanguages: getUserLanguages,
     getUserFollowers: getUserFollowers,
-    followerObj: followerObj
+    getUserFollowers2: getUserFollowers2,
+    followerObj: followerObj,
+    initialFollowerChain: initialFollowerChain,
+    followerCreation: followerCreation
   };
 
   //a week is an array of objects
@@ -245,6 +248,13 @@ function GitApi ($q, $http, Auth) {
      });
   }
 
+  function getUserFollowers2 (username) {
+    var followers = gitApi + 'users/' + username + '/followers';
+     return get(followers).then(function (res) {
+      return res.data;
+     });
+  }
+
   function followerObj (username) {
     var followers = gitApi + 'users/' + username + '/followers';
     var username = username;
@@ -271,6 +281,28 @@ function GitApi ($q, $http, Auth) {
         }
         return tempData;
       });
+  }
+
+  function initialFollowerChain (array) {
+    var testData = {
+      name: 'johnnygames',
+      children: []
+    }
+    for (var i = 0; i < array.length; i++) {
+      testData.children.push(array[i]);
+    }
+    return testData;
+  }
+
+  function followerCreation (obj) {
+    for (var i = 0; i < obj.children.length; i++) {
+      var newUser = {
+        name: obj.children[i].login,
+        children: []
+      }
+      obj.children[i] = newUser;
+    }
+    return obj;
   }
 }
 })();
