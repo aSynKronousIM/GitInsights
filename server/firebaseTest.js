@@ -1,45 +1,41 @@
 /**
- * Created by kate on 3/25/15.
- */
-//var Firebase = require('firebase');
-//
-//var ref = new Firebase('https://gitinsights.firebaseio.com');
-//
-//var list = ref.child("list");
-//
-//list.set({
-//  candidate1: {
-//    github: 'barbbella',
-//    name: 'Kate Jefferson'
-//  },
-//  candidate2: {
-//    github: 'johnnygames',
-//    name: 'John Games'
-//  }
-//});
-
-/**
  * Firebase module
  * @type {module|*}
  */
 var db = angular.module('Firebase', ['firebase']);
 // makes $firebaseObject, $firebaseArray, and $firebaseAuth available
 
+/** Favorite Factory
+ * returns the user's list of favorites
+ */
+db.factory('favoritesList', ['$firebaseArray',
+  function($firebaseArray) {
+    // need reference to user's data
+    var user = 'blah';
+    var ref = new Firebase('https://gitinsights.firebaseio.com/' + user);
+    return $firebaseArray(ref);
+  }
+]);
+
 /**
  * Firebase controller for favorite list
  */
-db.controller('ListController', function($scope, $firebaseArray) {
-  var ref = new Firebase('https://gitinsights.firebaseio.com/favorites');
+db.controller('FavoriteController',
+  function($scope, favoritesList) {
 
-  // creates synchronized array
-  // do not use array methods
-  // use $add() $save() and $remove()
-  $scope.favorites = $firebaseArray(ref);
+    $scope.user = 'Guest' + Math.round(Math.random() * 100);
+    // adds array to scope to be used in ng-repeat
+    $scope.favorites = favoritesList;
 
-  $scope.addFavorite = function () {
-    $scope.favorites.$add({
-      username: $scope.username
-    });
-  };
-});
+    // method to add favorite called by ng-submit
+    $scope.addFavorite = function() {
+      $scope.favorites.$add({
+        username: $scope.username
+      });
+      // resets username field
+      $scope.username = '';
+    };
+
+  }
+);
 
