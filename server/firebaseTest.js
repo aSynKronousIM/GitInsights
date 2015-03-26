@@ -23,7 +23,7 @@ db.factory('favoritesList', ['$firebaseObject',
 /**
  * Firebase controller for favorite list
  */
-db.controller('favoriteController', ['$scipe', 'favoritesList',
+db.controller('favoriteController', ['$scope', 'favoritesList',
   function($scope, favoritesList) {
     // make list available to DOM
     // need username from auth
@@ -32,24 +32,6 @@ db.controller('favoriteController', ['$scipe', 'favoritesList',
 
     // 3-way binding, may eliminate need for save function
     favoritesList($scope.user).$bindTo($scope, 'favoritesList');
-
-    //// syncs object back to Firebase
-    //$scope.saveFavorites = function () {
-    //  $scope.list.$save().then(function() {
-    //    console.log('List saved to Firebase!');
-    //  }).catch(function(error) {
-    //    console.log('Sync failed:' + error);
-    //  });
-    //};
-
-    //// method to add favorite called by ng-submit
-    //$scope.addFavorite = function() {
-    //  $scope.favorites.$add({
-    //    username: $scope.username
-    //  });
-    //  // resets username field
-    //  $scope.username = '';
-    //};
   }
 ]);
 
