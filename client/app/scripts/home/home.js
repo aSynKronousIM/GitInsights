@@ -9,14 +9,16 @@
     .primaryPalette('light-blue')
   });
 
-  HomeController.$inject = ['$scope', 'GitApi', 'Auth', 'Chart'];
+  HomeController.$inject = ['$scope', 'GitApi', 'Auth', 'Chart', '$q', '$http', '$resource', 'dateFormat'];
 
-  function HomeController($scope, GitApi, Auth, Chart){
+  function HomeController($scope, GitApi, Auth, Chart, $q, $http, $resource, dateFormat){
     $scope.github = {};
     $scope.currentUser = {};
     $scope.loaded = false;
     $scope.loaded3 = true;
     $scope.numUsers = 0;
+    $scope.gitName = $scope.gitName;
+    $scope.totalEvents = [];
 
     $scope.login = function(){
       Auth.login()
@@ -32,6 +34,7 @@
         .then(function (data){ 
           // here we can immediately process the data to draw a line graph of the user's activity
           var weeklyData = GitApi.reduceAllWeeklyData(data)
+          console.log('Weekly Data - ', weeklyData);
           Chart.lineGraph(weeklyData, username);
           $scope.loaded = true;
           $scope.currentUser = {};
@@ -59,14 +62,54 @@
         });
     };
 
-    // David's quick access area to test different functions
-    $scope.testTest = function(){
-      // GitApi.testGetContribHistory();
+    // David's quick access play area to test different functions
+    $scope.getUserContributionData = function(username){
+      // Default to Games if no username is entered
+      var username = $scope.gitName || 'johnnygames';
+
+      function getEventsData (username) {
+        // Github API endpoint for a user's events
+        var Events = $resource('https://api.github.com/users/:username/events?page=:number')
+        // Start on page 1
+        var num = 1;
+        var allEventData = [];
+
+        // recursive subroutine for traversing the paginated results
+        var pageTraverse = function(num){
+          return Events.query({username: username, number: num}, function(data){
+            // base case
+            // since pages can be up to 30 items in length, if the page has fewer than 30, it's the last page
+            if(data.length < 30){
+              data.forEach(function(singleEvent){
+                allEventData.push(singleEvent);
+              });
+              
+              $scope.totalEvents.push(dateFormat.processContributionData(allEventData, username));
+              return;
+            }
+            // increase num to move to the next page
+            num ++;
+
+            data.forEach(function(singleEvent){
+              allEventData.push(singleEvent);
+            })
+            // recurse
+            pageTraverse(num);
+          })
+        };
+        pageTraverse(num);
+      };
+      getEventsData(username);
+    };
+
+    $scope.basicReset = function(){
       // currently clears out both pie charts, if I clear out the lineGraph, then it won't come back up again.
       Chart.empty()
-      // GitApi.getUserFollowers();
 
     };
+
+    // End of David's Play Area
+
   }
 })();
 

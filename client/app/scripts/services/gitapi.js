@@ -4,8 +4,8 @@
 angular.module('gitInsight.gitapi', [])
   .factory('GitApi', GitApi);
 
-GitApi.$inject = ['$q', '$http', 'Auth'];
-function GitApi ($q, $http, Auth) {
+GitApi.$inject = ['$q', '$http', 'Auth', '$resource'];
+function GitApi ($q, $http, Auth, $resource) {
 
   var gitApi = 'https://api.github.com/';
   var usersRepos = {};
@@ -18,7 +18,7 @@ function GitApi ($q, $http, Auth) {
     getUserContact: getUserContact,
     gatherLanguageData: gatherLanguageData,
     getUserLanguages: getUserLanguages,
-    testGetContribHistory: testGetContribHistory
+    getEventsData: getEventsData
   };
 
   //a week is an array of objects
@@ -27,8 +27,10 @@ function GitApi ($q, $http, Auth) {
   //we return an array of reduced week objects to graph the total additions/deletions
   function reduceAllWeeklyData (array, username) {
     var reduced = {};
+    console.log('Arraylength - ', array.length)
     array.forEach(function (result) {
       if(result !== undefined){
+        console.log('Result - ', result);
         result.weeks.forEach(function (data) {
             var week = data.w;
             for (var key in data) {
@@ -71,48 +73,41 @@ function GitApi ($q, $http, Auth) {
 // David Testing Area!!!
 // Please beware
 
-  function testGetContribHistory (username) {
-    // var url = "https://statocat.herokuapp.com/u/johnnygames.json"
-      var page = 1;
-      var outsideLength = 0;
-      var url = "https://api.github.com/users/johnnygames/events?page=1";
-    // get(url).then(function(res){
-    //   console.log('Here is your data - ', res.data);
-    // })
-    var params = params || {access_token: Auth.getToken()};
+  function getEventsData (username) {
+    var Events = $resource('https://api.github.com/users/:username/events?page=:number')
+    var num = 1;
+    var allEventData = [];
 
+    var pageTraverse = function(num){
+      return Events.query({username: username, number: num}, function(data){
+        if(data.length < 30){
+          // data.forEach(function(singleEvent){
+            // allEventData.push(singleEvent);
+          // });
+          // console.log('last page of results - ', allEventData);
 
-    return $http({
-      mathod: 'GET',
-      // headers: { Access-Control-Allow-Origin: "*" },
-      url: url,
-      params: params
-    })
-      .success(function(data, status, headers, config){
-        console.log('success');
-        console.log('data - ', data);
-        console.log('status - ', status);
-        console.log('headers - ', headers);
-        console.log('config - ', config);
-    })
-      .error(function(){
-        console.log('error');
-      });
+          return;
+        }
+        num ++;
+        console.log('num - ', num);
+        // console.log('In query - ', data);
+        // data.forEach(function(singleEvent){
+          // allEventData.push(singleEvent);
+        // })
+        pageTraverse(num);
+      }).$promise.then(function(someData){
+        someData.forEach(function(hubEvent){
+          allEventData.push(hubEvent);
+        });
+        console.log('Some Data - ', allEventData);
+      })
+    };
 
-    // var recursiveGetter = function(){
-    //   get(url).then(function(res, req){
-    //     console.log("sane data - ", res.data);
-    //     console.log('next link - ', res.link)
-    //     var length = res.data.length;
-    //     outsideLength = length;
-    //     // if(outsideLength === 100){
-    //     //   page = page + 1;
-    //     //   outsideLength = 0;
-    //     //   recursiveGetter()
-    //     // }
-    //   });
-    // }
-    // recursiveGetter();
+    return pageTraverse(num);
+
+    // console.log('what about me - ', allEventData)
+    // return allEventData
+
 
   }
 
