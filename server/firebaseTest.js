@@ -32,24 +32,6 @@ db.controller('favoriteController', ['$scope', 'favoritesList',
 
     // 3-way binding, may eliminate need for save function
     favoritesList($scope.user).$bindTo($scope, 'favoritesList');
-
-    //// syncs object back to Firebase
-    //$scope.saveFavorites = function () {
-    //  $scope.list.$save().then(function() {
-    //    console.log('List saved to Firebase!');
-    //  }).catch(function(error) {
-    //    console.log('Sync failed:' + error);
-    //  });
-    //};
-
-    //// method to add favorite called by ng-submit
-    //$scope.addFavorite = function() {
-    //  $scope.favorites.$add({
-    //    username: $scope.username
-    //  });
-    //  // resets username field
-    //  $scope.username = '';
-    //};
   }
 ]);
 

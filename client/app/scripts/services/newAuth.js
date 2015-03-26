@@ -20,6 +20,13 @@ db.controller('AuthController', ['$scope', 'Auth',
         password: $scope.password
       }).then(function(userData) {
         $scope.message = 'User created with uid:' + userData.uid;
+        // logs in the newly created user
+        return Auth.$authWithPassword({
+          email: $scope.email,
+          password: $scope.password
+        });
+      }).then(function(authData) {
+        console.log('Logged in as:' + authData.uid);
       }).catch(function(error) {
         $scope.error = error;
       });
