@@ -9,6 +9,7 @@ angular.module('gitInsight', [
   'gitInsight.chart',
   'gitInsight.dateFormat',
   'gitInsight.dendrogram',
+  'gitInsight.barChart',
   // 'gitInsight.newAuth',
   'firebase'
 ])

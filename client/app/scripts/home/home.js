@@ -9,9 +9,9 @@
     .primaryPalette('light-blue')
   });
 
-  HomeController.$inject = ['$scope', 'GitApi', 'Auth', 'Chart', 'Dendrogram', '$q', '$timeout', '$http', '$resource', 'dateFormat'];
+  HomeController.$inject = ['$scope', 'GitApi', 'Auth', 'Chart', 'Dendrogram', '$q', '$timeout', '$http', '$resource', 'dateFormat', 'barChart'];
 
-  function HomeController($scope, GitApi, Auth, Chart, Dendrogram, $q, $timeout, $http, $resource, dateFormat){
+  function HomeController($scope, GitApi, Auth, Chart, Dendrogram, $q, $timeout, $http, $resource, dateFormat, barChart){
     $scope.github = {};
     $scope.currentUser = {};
     $scope.loaded = false;
@@ -21,6 +21,7 @@
     $scope.totalEvents = [];
     $scope.userData = [];
     $scope.tableFuncCalled = false;
+    $scope.contribChartCalled = false;
 
     $scope.login = function(){
       Auth.login()
@@ -75,9 +76,16 @@
     // 
     // 
 
+    $scope.makeBarChart = function(){
+      var data = $scope.totalEvents;
+      barChart.makeBarChart(data);
+      $scope.contribChartCalled = true;
+    };
+
+
     $scope.getUserContributionData = function(username){
-      // Default to Games if no username is entered
-      var username = $scope.gitName || 'johnnygames';
+      var username = $scope.gitName;
+      if($scope.gitName === undefined){ return; }
 
 
       function getEventsData (username) {
@@ -96,13 +104,15 @@
                 allEventData.push(singleEvent);
               });
               $scope.gitName = "";
-              console.log('allEventData - ', allEventData);
               $scope.totalEvents.push(dateFormat.processContributionData(allEventData, username));
+              // if contribChart has already been rendered, re-render it with new data
+              if($scope.contribChartCalled){ 
+                $scope.makeBarChart(); 
+              }
               return;
             }
             // increase num to move to the next page
             num ++;
-
             data.forEach(function(singleEvent){
               allEventData.push(singleEvent);
             })
@@ -125,7 +135,7 @@
 
         })
       }
-      setTimeout(function(){ getUserData(username); }, 1000);
+      setTimeout(function(){ getUserData(username); }, 1300);
     };
 
     // As mentioned in the html, this should be able to add a user to a list of favorites, but not sure how to do that yet.
