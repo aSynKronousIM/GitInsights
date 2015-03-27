@@ -4,8 +4,8 @@
 angular.module('gitInsight.gitapi', [])
   .factory('GitApi', GitApi);
 
-GitApi.$inject = ['$q', '$http', 'Auth', '$resource'];
-function GitApi ($q, $http, Auth, $resource) {
+GitApi.$inject = ['$q', '$http', '$resource'];
+function GitApi ($q, $http, $resource) {
 
   var gitApi = 'https://api.github.com/';
   var usersRepos = {};

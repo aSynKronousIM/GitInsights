@@ -189,3 +189,20 @@ body {
 div .welcome {
   margin-top:14%;
 }
+
+/*Table Styling*/
+
+.table {
+  width: 100%;
+  max-width: 100%
+  margin-bottom: 2rem;
+  text-align: left;
+  vertical-align: top;
+  
+}
+
+
+
+
+
+
