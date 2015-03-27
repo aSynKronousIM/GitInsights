@@ -34,4 +34,3 @@ db.controller('favoriteController', ['$scope', 'favoritesList',
     favoritesList($scope.user).$bindTo($scope, 'favoritesList');
   }
 ]);
-

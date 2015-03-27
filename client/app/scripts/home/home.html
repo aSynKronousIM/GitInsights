@@ -71,7 +71,6 @@
       <md-input type="text" placeholder="GitHub Handle" ng-model="gitName"></md-input>
       <md-button ng-click="getUserContributionData()">Test Me</md-button>
       <md-button ng-click="basicReset()">Reset</md-button>
-      <p>Then check the console.</p>
       <div ng-repeat="event in totalEvents">
         <p><strong>{{event.username}}</strong> has made <strong>{{event.total}}</strong> contributions over the past {{event.dateRange}} days <br>
         Giving him an average of {{event.overallAverage}} contributions per day for that period<br>
