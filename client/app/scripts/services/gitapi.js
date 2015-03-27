@@ -370,7 +370,7 @@ function GitApi ($q, $http, $resource, Auth) {
 
   function initialFollowerChain (array) {
     var testData = {
-      name: 'johnnygames',
+      name: 'Current User',
       children: []
     }
     for (var i = 0; i < array.length; i++) {

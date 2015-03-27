@@ -22,7 +22,7 @@ function Dendrogram () {
     var diagonal = d3.svg.diagonal.radial()
         .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#chart5").append("svg")
         .attr("width", radius * 2)
         .attr("height", radius * 2)
       .append("g")
@@ -52,6 +52,6 @@ function Dendrogram () {
             .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
             .text(function(d) { return d.name; });
       };   
-    d3.select(self.frameElement).style("height", radius * 2 + "px");     
+    d3.select("#chart5").style("height", radius * 2 + "px");     
   }
 })();

@@ -31,7 +31,6 @@
     }
 
     $scope.getAllWeeklyData = function(username){
-      $scope.getUserFollowers(username);
 
       // first we make a set of queries to get data from all the repo's the user has contributed to.
       // the process also tags some metadata to help with chaining
@@ -69,6 +68,9 @@
           var allRepoFanSData = GitApi.getRepoFanS(username);
           Chart.multiBarChart(allRepoFanSData, username);
         });
+      $timeout(function() {
+        $scope.getUserFollowers(username);
+      }, 1000);
     };
 
     // 
