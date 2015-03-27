@@ -10,6 +10,7 @@
               <li><a ng-click="login()" ng-if="!github.username" href="">Login with Git</a></li>
               <li ng-if="github.username" scope.model="github"><h2>{{github.username}}</h2></li>
               <li><a ng-click="getUserFollowers()" href="">Get User Followers in Console</a></li>
+              <li><a ng-click="basicReset()" href="">Reset</a></li>
             </ul>
           </nav>
         </div>
@@ -64,6 +65,7 @@
         </svg>
       </div>
 
+
       <div class="mastfoot">
         <div class="inner">
           <!-- <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p> -->
@@ -72,10 +74,23 @@
     </div>
 
     <div class="contrib-container">
+
       <div class="contrib-search">
+        <h2 class="cover-heading">Contribution Trends</h2>
         <md-input type="text" placeholder="GitHub Handle" ng-model="gitName" ng-keypress="($event.which === 13)?getUserContributionData():0"></md-input>
-        <md-button ng-click="getUserContributionData()">FIND</md-button>
-        <!-- <md-button ng-click="basicReset()">Reset</md-button> -->          
+        <md-button ng-click="getUserContributionData()">Find</md-button>
+        <md-button ng-if="tableFuncCalled" ng-click="makeBarChart()">Chart It</md-button>          
+      </div>
+
+      <div ng-if="contribChartCalled" id="contribsChart" class="clearfix">
+        <svg style="height:500px;">
+        </svg>
+      </div>
+
+      <div class='row'>
+        <!-- <div class='col-md-12'> -->
+          <hr>
+        <!-- </div> -->
       </div>
 
       <div ng-if="tableFuncCalled"class="table-responsive-vertical shadow-z-1 contrib-table">     
@@ -88,7 +103,8 @@
               <th>Daily Average, Past Month</th>
               <th>Link</th>
               <th>Email</th>
-              <th>Favorite</th>
+              <!-- For future 'favorites functionality' -->
+              <!-- <th>Favorite</th> -->
             </tr>
           </thead>
           <tbody>
@@ -100,7 +116,7 @@
               <td data-title="Link"><a ng-href="{{event.link}}">GitHub</a></td>
               <td data-title="Email">{{event.email}}</td>
               <!-- Theoretically this would add the user to a favorites list, but I'm still unsure how to make that happen -->
-              <td data-title="Favorite" ng-click="addToFavorites()">Add</td>
+              <!-- <td data-title="Favorite" ng-click="addToFavorites()">Add</td> -->
             </tr>            
           </tbody>
         </table>

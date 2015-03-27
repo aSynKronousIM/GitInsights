@@ -120,6 +120,7 @@ function Chart () {
 
     for (var i = data.length-1; i >= 0; i--)  {
       //userFanSData[0].values.push([data[i][2], data[i][0]]);  // forks stream
+      console.log('data in barChart - ', data[i])
       userFanSData[0].values.push({"label": data[i][2], "value": data[i][0]});  // forks stream
       userFanSData[1].values.push({"label": data[i][2], "value": data[i][1]});  // stars stream
       //userFanSData[1].values.push([data[i][2], data[i][1]]);  // stars stream
