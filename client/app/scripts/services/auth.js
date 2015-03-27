@@ -16,7 +16,7 @@ function Auth ($q) {
   //create an instance to interact with firebase api.
   //url refers to Firebase database.
   //for more information about Firebase please refer to http://www.firebase.com
-  var ref = new Firebase("https://gitinsightapp.firebaseio.com");
+  var ref = new Firebase("https://gitinsights.firebaseio.com");
 
   var github;
 
