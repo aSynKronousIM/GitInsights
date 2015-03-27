@@ -9,10 +9,12 @@ Chart.$inject = [];
 function Chart () {
 
   var usersData = [];
+  var usersFanSData = [];
 
   return {
     lineGraph: lineGraph,
     pieChart: pieChart,
+    multiBarChart: multiBarChart,
     empty: empty
   };
 
@@ -42,6 +44,8 @@ function Chart () {
     }
 
     usersData.push(userData);
+    console.log('usersData: ', usersData);
+    console.log('userData: ', userData);
 
     // nv is a nvd3 library object. (on global scope)
     nv.addGraph(function() {
@@ -111,13 +115,59 @@ function Chart () {
     });
   };
 
+  function multiBarChart (data, username) {
+    var userFanSData = [{"key": username + "'s Forks", "values": []}, {"key": username + "'s Stars", "values": []}];
+
+    for (var i = data.length-1; i >= 0; i--)  {
+      //userFanSData[0].values.push([data[i][2], data[i][0]]);  // forks stream
+      userFanSData[0].values.push({"label": data[i][2], "value": data[i][0]});  // forks stream
+      userFanSData[1].values.push({"label": data[i][2], "value": data[i][1]});  // stars stream
+      //userFanSData[1].values.push([data[i][2], data[i][1]]);  // stars stream
+    }
+
+    if(usersFanSData.length >= 2){
+      usersFanSData = [];
+    }
+
+    usersFanSData.push(userFanSData);
+    console.log('usersFanSData: ', usersFanSData);
+    console.log('userFanSData: ', userFanSData);
+
+    nv.addGraph(function() {
+      var chart = nv.models.multiBarChart()
+      .x(function(d) {return d.label;})
+      .y(function(d) {return d.value;})
+      .reduceXTicks(false)   //If 'false', every single x-axis tick label will be rendered.
+      .rotateLabels(-90)      //Angle to rotate x-axis labels.
+      .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+      .groupSpacing(0.1)    //Distance between each group of bars.
+      ;
+
+      //chart.xAxis
+      //.tickFormat(d3.format(',f'));
+
+      chart.yAxis
+      .tickFormat(d3.format(',f'));
+
+      d3.select('#chart4 svg')
+      .datum(userFanSData)
+      .transition()
+      .duration(350)
+      .call(chart);
+
+      nv.utils.windowResize(chart.update);
+
+      return chart;
+    });
+  };
+
   // Barbaric reset function
   function empty () {
     $('#chart2').remove();
     $('#chart3').remove();
+    $('#chart4').remove();
     console.log('Reset called');
-  }
-
+  };
 }
 })();
 
