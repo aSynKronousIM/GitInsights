@@ -78,9 +78,10 @@
       <div class="contrib-search">
         <h2 class="cover-heading">Contribution Trends</h2>
         <md-input type="text" placeholder="GitHub Handle" ng-model="gitName" ng-keypress="($event.which === 13)?getUserContributionData():0"></md-input>
-        <md-button ng-click="getUserContributionData()">Find</md-button>
-        <md-button ng-if="tableFuncCalled" ng-click="makeBarChart()">Chart It</md-button>          
-      </div>
+        <md-button ng-click="getUserContributionData()">Find Them</md-button>
+        <md-button ng-if="tableFuncCalled" ng-click="makeBarChart()">Chart Them</md-button>          
+        <md-button ng-if="tableFuncCalled" ng-click="resetContribChart()">Reset Them</md-button>          
+    </div>
 
       <div ng-if="contribChartCalled" id="contribsChart" class="clearfix">
         <svg style="height:500px;">

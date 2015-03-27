@@ -82,6 +82,11 @@
       $scope.contribChartCalled = true;
     };
 
+    $scope.resetContribChart = function(){
+      $scope.totalEvents = [];
+      $scope.tableFuncCalled = false;
+      $scope.contribChartCalled = false;
+    };
 
     $scope.getUserContributionData = function(username){
       var username = $scope.gitName;
