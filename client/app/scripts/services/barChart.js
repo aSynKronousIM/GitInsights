@@ -46,7 +46,7 @@ function barChart () {
       .x(function(d) {return d.label;})
       .y(function(d) {return d.value;})
       .reduceXTicks(false)   //If 'false', every single x-axis tick label will be rendered.
-      .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+      .showControls(false)   //Hide the 'Grouped'/'Stacked' options.
       .groupSpacing(0.1)    //Distance between each group of bars.
       ;
 
@@ -54,7 +54,7 @@ function barChart () {
       // .tickFormat(d3.format(',f'));
 
       chart.yAxis
-      .tickFormat(d3.format(',f'));
+      .tickFormat(d3.format(',.1f'));
 
       d3.select('#contribsChart svg')
       .datum(usersContribData)

@@ -15,7 +15,7 @@ function Chart () {
     lineGraph: lineGraph,
     pieChart: pieChart,
     multiBarChart: multiBarChart,
-    empty: empty
+    reset: reset
   };
 
   function lineGraph (data, username) {
@@ -155,10 +155,10 @@ function Chart () {
   };
 
   // Barbaric reset function
-  function empty () {
-    $('#chart2').remove();
-    $('#chart3').remove();
-    $('#chart4').remove();
+  function reset () {
+    pieChart();
+    multiBarChart();
+    lineGraph();
     console.log('Reset called');
   };
 }

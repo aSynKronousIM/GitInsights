@@ -31,6 +31,8 @@
     }
 
     $scope.getAllWeeklyData = function(username){
+      $scope.getUserFollowers(username);
+
       // first we make a set of queries to get data from all the repo's the user has contributed to.
       // the process also tags some metadata to help with chaining
       GitApi.getAllWeeklyData(username)
@@ -67,7 +69,6 @@
           var allRepoFanSData = GitApi.getRepoFanS(username);
           Chart.multiBarChart(allRepoFanSData, username);
         });
-
     };
 
     // 
@@ -82,6 +83,11 @@
       $scope.contribChartCalled = true;
     };
 
+    $scope.resetContribChart = function(){
+      $scope.totalEvents = [];
+      $scope.tableFuncCalled = false;
+      $scope.contribChartCalled = false;
+    };
 
     $scope.getUserContributionData = function(username){
       var username = $scope.gitName;
@@ -135,7 +141,7 @@
 
         })
       }
-      setTimeout(function(){ getUserData(username); }, 1300);
+      setTimeout(function(){ getUserData(username); }, 2000);
     };
 
     // As mentioned in the html, this should be able to add a user to a list of favorites, but not sure how to do that yet.
@@ -144,15 +150,16 @@
 
     $scope.basicReset = function(){
       // currently clears out both pie charts, if I clear out the lineGraph, then it won't come back up again.
-      Chart.empty()
+      $scope.loaded = false;
+      Chart.reset()
 
     };
 
     // End of David's Play Area
 
-    $scope.getUserFollowers = function() {
+    $scope.getUserFollowers = function(username) {
       
-      GitApi.getUserFollowers('johnnygames')
+      GitApi.getUserFollowers(username)
         .then(function (data) {
           return GitApi.initialFollowerChain(data);
         })
