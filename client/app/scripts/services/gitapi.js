@@ -4,8 +4,8 @@
 angular.module('gitInsight.gitapi', [])
   .factory('GitApi', GitApi);
 
-GitApi.$inject = ['$q', '$http', '$resource'];
-function GitApi ($q, $http, $resource) {
+GitApi.$inject = ['$q', '$http', '$resource', 'Auth'];
+function GitApi ($q, $http, $resource, Auth) {
 
   var gitApi = 'https://api.github.com/';
   var usersRepos = {};
@@ -166,6 +166,7 @@ function GitApi ($q, $http, $resource) {
   }
 
   function getForks (username) {
+    repoForks = [];
     var allRepos = usersRepos[username];
     for (var i = allRepos.length-1; i >= 0; i--) {
       repoForks.push(allRepos[i].forks_count);
@@ -175,6 +176,7 @@ function GitApi ($q, $http, $resource) {
   }
 
   function getStars (username) {
+    repoStars = [];
     var allRepos = usersRepos[username];
     for (var i = allRepos.length-1; i >= 0; i--) {
       repoStars.push(allRepos[i].stargazers_count);
@@ -185,6 +187,7 @@ function GitApi ($q, $http, $resource) {
 
   // gather repo name, stars and forks to send to chart
   function getRepoFanS (username) {
+    repoFanS = [];
     var allRepos = usersRepos[username];
     getForks(username);
     getStars(username);
