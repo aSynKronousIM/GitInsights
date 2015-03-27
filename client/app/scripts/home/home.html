@@ -19,7 +19,7 @@
         <!-- <div> -->
           <div ng-if="!loaded" class="welcome">
             <h1 class="cover-heading">Git Insight</h1>
-            <p class="lead">We can help recruiters and employers analyze someone's github profile</p>
+            <p class="lead">We help recruiters and employers analyze candidate github profiles</p>
             <p class="lead">
               <md-content md-theme="docs-dark" class="md-padding" layout="row" layout-sm="column" style="font-size:1.2em">
                 <md-input-container required flex>
@@ -66,16 +66,39 @@
       </div>
     </div>
 
-    <div>
-    <!-- my tester button for trying out different functions -->
-      <md-input type="text" placeholder="GitHub Handle" ng-model="gitName"></md-input>
-      <md-button ng-click="getUserContributionData()">Test Me</md-button>
-      <md-button ng-click="basicReset()">Reset</md-button>
-      <p>Then check the console.</p>
-      <div ng-repeat="event in totalEvents">
-        <p><strong>{{event.username}}</strong> has made <strong>{{event.total}}</strong> contributions over the past {{event.dateRange}} days <br>
-        Giving him an average of {{event.overallAverage}} contributions per day for that period<br>
-        And an average of {{event.pastMonthAverage}} contributions per day for the past month</p>
+    <div class="contrib-container">
+      <div class="contrib-search">
+        <md-input type="text" placeholder="GitHub Handle" ng-model="gitName" ng-keypress="($event.which === 13)?getUserContributionData():0"></md-input>
+        <md-button ng-click="getUserContributionData()">FIND</md-button>
+        <!-- <md-button ng-click="basicReset()">Reset</md-button> -->          
+      </div>
+
+      <div ng-if="tableFuncCalled"class="table-responsive-vertical shadow-z-1 contrib-table">     
+        <table id="table" class="table table-hover table-mc-light-blue">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Total Contributions</th>
+              <th>Daily Average, Lifetime</th>
+              <th>Daily Average, Past Month</th>
+              <th>Link</th>
+              <th>Email</th>
+              <th>Favorite</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="event in totalEvents" ng-if="event.loaded">
+              <td data-title="Username">{{event.username}}</td>
+              <td data-title="Total Contributions">{{event.total}}</td>
+              <td data-title="Average">{{event.overallAverage}}</td>
+              <td data-title="Last Month Average">{{event.pastMonthAverage}}</td>
+              <td data-title="Link"><a ng-href="{{event.link}}">GitHub</a></td>
+              <td data-title="Email">{{event.email}}</td>
+              <!-- Theoretically this would add the user to a favorites list, but I'm still unsure how to make that happen -->
+              <td data-title="Favorite" ng-click="addToFavorites()">Add</td>
+            </tr>            
+          </tbody>
+        </table>
       </div>
     </div>
 

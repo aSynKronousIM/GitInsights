@@ -19,8 +19,8 @@
     $scope.numUsers = 0;
     $scope.gitName = $scope.gitName;
     $scope.totalEvents = [];
-    $scope.recursiveChecker = false;
-    $scope.counter = 0;
+    $scope.userData = [];
+    $scope.tableFuncCalled = false;
 
     $scope.login = function(){
       Auth.login()
@@ -74,13 +74,13 @@
       // Default to Games if no username is entered
       var username = $scope.gitName || 'johnnygames';
 
+
       function getEventsData (username) {
+        var allEventData = [];
         // Github API endpoint for a user's events
         var Events = $resource('https://api.github.com/users/:username/events?page=:number')
         // Start on page 1
         var num = 1;
-        var allEventData = [];
-
         // recursive subroutine for traversing the paginated results
         var pageTraverse = function(num){
           return Events.query({username: username, number: num, access_token: Auth.getToken()}, function(data){
@@ -90,7 +90,8 @@
               data.forEach(function(singleEvent){
                 allEventData.push(singleEvent);
               });
-              
+              $scope.gitName = "";
+              console.log('allEventData - ', allEventData);
               $scope.totalEvents.push(dateFormat.processContributionData(allEventData, username));
               return;
             }
@@ -107,7 +108,24 @@
         pageTraverse(num);
       };
       getEventsData(username);
+
+      function getUserData (username) {
+        var Events = $resource('https://api.github.com/users/:username')
+        Events.get({username: username, access_token: Auth.getToken()}, function(data){
+          var length = $scope.totalEvents.length - 1;
+          $scope.totalEvents[length].email = data.email;
+          $scope.totalEvents[length].link = data.html_url;
+          $scope.tableFuncCalled = true;
+          $scope.totalEvents[length].loaded = true;
+
+        })
+      }
+      setTimeout(function(){ getUserData(username); }, 1000);
     };
+
+    // As mentioned in the html, this should be able to add a user to a list of favorites, but not sure how to do that yet.
+    $scope.addToFavorites = function(username){
+    }
 
     $scope.basicReset = function(){
       // currently clears out both pie charts, if I clear out the lineGraph, then it won't come back up again.

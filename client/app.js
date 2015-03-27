@@ -8,7 +8,9 @@ angular.module('gitInsight', [
   'gitInsight.compare',
   'gitInsight.chart',
   'gitInsight.dateFormat',
-  'gitInsight.dendrogram'
+  'gitInsight.dendrogram',
+  // 'gitInsight.newAuth',
+  'firebase'
 ])
 .config(function($routeProvider, $httpProvider){
   $routeProvider
