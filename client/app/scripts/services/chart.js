@@ -116,21 +116,14 @@ function Chart () {
   };
 
   function multiBarChart (data, username) {
+    console.log('this is userFanSData: ', userFanSData);
     var userFanSData = [{"key": username + "'s Forks", "values": []}, {"key": username + "'s Stars", "values": []}];
 
     for (var i = data.length-1; i >= 0; i--)  {
-      //userFanSData[0].values.push([data[i][2], data[i][0]]);  // forks stream
       userFanSData[0].values.push({"label": data[i][2], "value": data[i][0]});  // forks stream
       userFanSData[1].values.push({"label": data[i][2], "value": data[i][1]});  // stars stream
-      //userFanSData[1].values.push([data[i][2], data[i][1]]);  // stars stream
     }
 
-    if(usersFanSData.length >= 2){
-      usersFanSData = [];
-    }
-
-    usersFanSData.push(userFanSData);
-    console.log('usersFanSData: ', usersFanSData);
     console.log('userFanSData: ', userFanSData);
 
     nv.addGraph(function() {
@@ -138,7 +131,7 @@ function Chart () {
       .x(function(d) {return d.label;})
       .y(function(d) {return d.value;})
       .reduceXTicks(false)   //If 'false', every single x-axis tick label will be rendered.
-      .rotateLabels(-90)      //Angle to rotate x-axis labels.
+      .rotateLabels(-60)      //Angle to rotate x-axis labels.
       .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
       .groupSpacing(0.1)    //Distance between each group of bars.
       ;
