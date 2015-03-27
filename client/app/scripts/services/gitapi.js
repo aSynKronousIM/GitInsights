@@ -9,15 +9,16 @@ function GitApi ($q, $http, Auth, $resource) {
 
   var gitApi = 'https://api.github.com/';
   var usersRepos = {};
-  var forkStar = {};
+  var repoFanS = [];
+  var repoForks = [];
+  var repoStars = [];
 
   return {
     reduceAllWeeklyData: reduceAllWeeklyData,
     getAllWeeklyData: getAllWeeklyData,
     getRepoWeeklyData: getRepoWeeklyData,
     getUserRepos: getUserRepos,
-    getForks: getForks,
-    getStars: getStars,
+    getRepoFanS: getRepoFanS,
     getUserContact: getUserContact,
     gatherLanguageData: gatherLanguageData,
     getUserLanguages: getUserLanguages,
@@ -166,24 +167,31 @@ function GitApi ($q, $http, Auth, $resource) {
 
   function getForks (username) {
     var allRepos = usersRepos[username];
-    var forksCount = 0;
     for (var i = allRepos.length-1; i >= 0; i--) {
-      //forksCount += allRepos[i].forks_count;
-      forkStar[i] = [];
-      forkStar[i].push(allRepos[i].forks_count);
+      repoForks.push(allRepos[i].forks_count);
     }
-    console.log('forkStar: ', forkStar);
-    return forksCount;
+    console.log('repoForks: ', repoForks);
+    return repoForks;
   }
 
   function getStars (username) {
     var allRepos = usersRepos[username];
-    var starsCount = 0;
     for (var i = allRepos.length-1; i >= 0; i--) {
-      forkStar[i].push(allRepos[i].stargazers_count);
+      repoStars.push(allRepos[i].stargazers_count);
     }
-    console.log('stars: ', starsCount);
-    return starsCount;
+    console.log('stars: ', repoStars);
+    return repoStars;
+  }
+
+  // gather repo name, stars and forks to send to chart
+  function getRepoFanS (username) {
+    var allRepos = usersRepos[username];
+    getForks(username);
+    getStars(username);
+    for (var i = allRepos.length-1; i >= 0; i--) {
+      repoFanS.push([repoForks[i], repoStars[i], allRepos[i].name]);
+    }
+    return repoFanS;
   }
 
   function getUserContact (username) {

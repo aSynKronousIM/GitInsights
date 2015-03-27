@@ -35,8 +35,7 @@
       GitApi.getAllWeeklyData(username)
         .then(function (data){ 
           // here we can immediately process the data to draw a line graph of the user's activity
-          var weeklyData = GitApi.reduceAllWeeklyData(data)
-          console.log('Weekly Data - ', weeklyData);
+          var weeklyData = GitApi.reduceAllWeeklyData(data);
           Chart.lineGraph(weeklyData, username);
           console.log('weeklydata is ', weeklyData);
           $scope.loaded = true;
@@ -64,8 +63,8 @@
           Chart.pieChart(languages, config);
         })
         .then(function (data) {
-          GitApi.getForks(username);
-          GitApi.getStars(username);
+          var allRepoFanSData = GitApi.getRepoFanS(username);
+          Chart.multiBarChart(allRepoFanSData, username);
         });
 
     };
